@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="lynleser-home">
+	<template>
+		<style is="custom-style">
+      :host {
+        display: block;
+      }
+      paper-material {
+        background-color: #fff;
+        padding: 16px 20px;
+        margin: 0.5em 1em;
+        border-radius: 2px;
+      }
+      paper-textarea {
+        text-align: left;
+        margin-bottom: 14px;
+      }
+      .buttonWrap {
+        text-align: right;
+      }
+    </style>
+
+    <paper-material>
+      <paper-textarea label="Type some text!"
+                      id="textField">
+      </paper-textarea>
+      <div class="buttonWrap">
+        <paper-button id="readButton">Read it!</paper-button>
+      </div>
+    </paper-material>
+		
+	</template>
+	<script>
+		Polymer({
+      is: 'lynleser-home',
+      properties: {
+        textValue: {
+          type: Array,
+          value: "Nothing to read ¯\\_(ツ)_/¯",
+          notify: true
+        },
+      },
+      listeners: {
+        "readButton.tap": "_readText"
+      },
+      _readText: function() {
+        if (!this.$.textField.value) return;
+        textString = this.$.textField.value;
+        this.textValue = textString.split(/\s+/);
+      }
+		});
+	</script>
+</dom-module>

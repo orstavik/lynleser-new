@@ -1,0 +1,74 @@
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="lynleser-book">
+  <template>
+    <style is="custom-style">
+      :host {
+        display: block;
+      }
+      :host paper-material {
+        height: auto;
+        background-color: #fff;
+        color: #212121;
+        margin: 0.5em 1em;
+        padding: 0.5em;
+        border-radius: 2px;
+        overflow: hidden;
+        transition-duration: 0.5s;
+        transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);;
+      }
+      :host[opened] paper-material {
+        height: 50vh;
+        max-height: 100vh;
+      }
+      h3 {
+        margin: 0;
+      }
+      p {
+        margin: 6px 0;
+        color: #757575;
+        font-size: 14px;
+      }
+      .buttonWrap {
+        text-align: right;
+      }
+    </style>
+    
+    <paper-material elevation="1">
+      <h3 id="booktitle">[[title]]</h3>
+      <p id="bookbody"></p>
+      <div class="buttonWrap">
+        <paper-button id="readButton">Read it!</paper-button>
+      </div>
+    </paper-material>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'lynleser-book',
+      properties: {
+        title: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        body: {
+          type: String,
+          value: '',
+          notify: true
+        }
+      },
+      listeners: {
+        "readButton.tap": "_readBook"
+      },
+      attached: function() {
+        this.$.bookbody.innerHTML = this.body.substring(0, 100)+"...";
+      },
+      _readBook: function(e, detail) {
+        this.text = this.body.split(/\s+/);
+        this.fire("readBook", {textDetail: this.text});
+      }
+    });
+  </script>
+</dom-module>

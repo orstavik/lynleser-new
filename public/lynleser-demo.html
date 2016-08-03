@@ -1,0 +1,62 @@
+<link rel="import" href="/bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="/bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="/bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="/elements-demo/lynleser-home.html">
+<link rel="import" href="/elements-demo/lynleser-reader.html">
+<link rel="import" href="/elements-demo/lynleser-library.html">
+
+<dom-module id="lynleser-demo">
+	<template>
+		<style is="custom-style" include="iron-flex iron-flex-alignment">
+			:host {
+				display: block;
+				@apply(--layout-fullbleed);
+				@apply(--layout-vertical);
+			}
+			paper-toolbar {
+				--paper-toolbar-background: var(--dark-lynleser-color);
+			}
+		</style>
+
+		<paper-header-panel>
+		  <paper-toolbar>
+		  	<paper-icon-button icon="arrow-back"
+													 id="backButton"
+                           style="margin-right: 24px"
+													 hidden>
+				</paper-icon-button>
+				<span>LYNLESER</span>
+				<span class="flex"></span>
+				<paper-icon-button icon="account-circle"
+                           id="loginIcon">
+        </paper-icon-button>
+		  </paper-toolbar>
+			<div>
+				<lynleser-home id="home" text-value={{textValue}}></lynleser-home>
+				<lynleser-library id="library" text-value={{textValue}}></lynleser-library>
+				<lynleser-reader id="reader" text-array=[[textValue]]></lynleser-reader>
+		  </div>
+		</paper-header-panel>
+
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-demo',
+			properties: {
+
+			}
+		})
+	</script>
+</dom-module>

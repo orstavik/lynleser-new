@@ -1,0 +1,265 @@
+<link rel="import" href="/bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="/bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="/bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="/elements/lynleser-home.html">
+<link rel="import" href="/elements/lynleser-reader.html">
+<link rel="import" href="/elements/lynleser-library.html">
+
+<dom-module id="lynleser-app">
+	<template>
+		<style is="custom-style" include="iron-flex iron-flex-alignment">
+			:host {
+				display: block;
+				@apply(--layout-fullbleed);
+				@apply(--layout-vertical);
+			}
+			paper-toolbar {
+				--paper-toolbar-background: var(--dark-lynleser-color);
+			}
+			.drawerToolbar {
+				background-image: url("images/drawerimage.png");
+				background-size: cover;
+				background-position: 50% 50%;
+			}
+			#greatings {
+				@apply(--paper-font-body1)
+			}
+			#loginIcon {
+				color: #fff;
+			}
+			.contentArea {
+				background-color: var(--lynleser-background-color);
+			}
+			paper-menu a {
+				color: initial;
+				text-decoration: initial;
+			}
+			.hiddenElement {
+				transform: scale(0);
+			}
+		</style>
+
+		<!-- <template id="App" is="dom-bind"> -->
+
+			<app-location route="{{route}}"
+										use-hash-as-path>
+			</app-location>
+			<app-route route="{{route}}"
+								 id="appRoute"
+								 pattern="/:page"
+								 data="{{pageData}}"
+								 tail="{{pageTail}}">
+			</app-route>
+
+		<paper-drawer-panel id="drawerPanel" force-narrow>
+				<paper-header-panel drawer mode="seamed">
+					<paper-toolbar class="medium-tall drawerToolbar">
+							<span class="flex bottom"></span>
+							<span class="bottom" 
+										id="signText"
+										style="overflow: visible">Log [[InOut]]</span>
+							<paper-icon-button id="signInButton"
+																 class="bottom"
+																 src="icons/login-variant.svg"
+																 tabindex="-1"
+																 hidden="{{signedIn}}">
+							</paper-icon-button>
+							<paper-icon-button id="signOutButton"
+																 class="bottom"
+																 src="icons/logout-variant.svg"
+																 tabindex="-1"
+																 hidden="{{!signedIn}}">
+							</paper-icon-button>
+						</div>
+					</paper-toolbar>
+					<paper-menu selected="{{pageData.page}}" attr-for-selected="page-name">
+						<a page-name="home" href="#/home">
+							<paper-item id="homeButton">Home</paper-item>
+						</a>
+						<a page-name="library" href="#/library">
+							<paper-item id="libraryButton">Library</paper-item>
+						</a>
+					</paper-menu>
+				</paper-header-panel>
+				<paper-header-panel main>
+					<paper-toolbar>
+						<paper-icon-button icon="menu"
+															 id="navButton"
+															 paper-drawer-toggle>
+						</paper-icon-button>
+						<paper-icon-button icon="arrow-back"
+															 id="backButton"
+                               style="margin-right: 24px"
+															 hidden>
+						</paper-icon-button>
+						<span>LYNLESER</span>
+						<span class="flex"></span>
+						<span id="greatings"></span>
+						<paper-icon-button icon="account-circle"
+                               id="loginIcon"
+                               hidden="{{!signedIn}}"
+                               disabled>
+             </paper-icon-button>
+					</paper-toolbar>
+					<div class="contentArea">
+						<iron-pages selected="{{pageData.page}}" attr-for-selected="page-name">
+							<section page-name="home">
+								<lynleser-home id="home"></lynleser-home>
+							</section>
+							<section page-name="library">
+								<lynleser-library id="library"></lynleser-library>
+							</section>
+						</iron-pages>
+						<lynleser-reader id="reader"></lynleser-reader>
+					</div>
+				</paper-header-panel>
+			</paper-drawer-panel>
+
+			<firebase-auth
+				id="auth"
+				app-name="lynleser-no"
+				provider="google"
+				signed-in="{{signedIn}}"
+				user="{{user}}">
+			</firebase-auth>
+
+		<!-- </template> -->
+
+		<script src="/scripts/app.js"></script>
+
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-app',
+			properties: {
+				appState: {
+					type: String,
+					value: "home",
+					notify: true,
+					reflectToAttribute: true
+				},
+				appPhase: {
+					type: String,
+					value: "waiting",
+					notify: true,
+					reflectToAttribute: true
+				},
+				signedIn: {
+					type: Boolean,
+					value: false,
+					notify: true,
+					reflectToAttribute: true,
+					observer: "_userInOut"
+				},
+			},
+			listeners: {
+				"openReader": "goRead",
+				"readBook": "goRead",
+        "start": "_isReading",
+        "pause": "_isPaused",
+        "finish": "_isFinished",
+        "clear": "_isWaiting",
+				"signInButton.tap": "signIn",
+				"signOutButton.tap": "signOut",
+				"homeButton.tap": "goHome",
+				"libraryButton.tap": "goLibrary",
+				"backButton.tap": "leaveRead",
+			},
+			attached: function() {
+				if (!this.$.appRoute.route.path) {
+					this.$.appRoute.set('route.path', '/home');
+					this.pageData.page = "home";
+				}
+			},
+			_isReading: function() {
+				this.appPhase = "reading";
+			},
+			_isPaused: function() {
+				this.appPhase = "pause";
+			},
+			_isFinished: function() {
+				this.appPhase = "finished";
+			},
+			_isWaiting: function() {
+				this.appPhase = "waiting";
+			},
+			goHome: function() {
+				this.appState = "home";
+				this.$.drawerPanel.closeDrawer();
+				// this.$.reader.$.player.$.playerFab.animate([
+				// 	{transform: 'scale(0) rotate(-90deg)' },
+				// 	{transform: 'scale(1) rotate(0)' }
+				// ], {
+				// 	duration: 250,
+				// 	fill: 'forwards',
+				// 	easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+				// });
+			},
+			goLibrary: function() {
+				this.appState = "library";
+				this.$.drawerPanel.closeDrawer();
+				// this.$.reader.$.player.$.playerFab.animate([
+				// 	{transform: 'scale(1)' },
+				// 	{transform: 'scale(0)' }
+				// ], {
+				// 	duration: 250,
+				// 	fill: 'forwards',
+				// 	easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+				// });
+			},
+			goRead: function(e) {
+				if (this.appPhase !== "pause") {
+	        if (this.appState == "home") {
+	          this.$.reader.textArray = this.$.home.getText();
+        		this.$.reader.startTimer();
+	        }
+	        else if (this.appState == "library") {
+	        	this.$.reader.textArray = e.detail.textDetail;
+        		this.$.reader.startTimer();
+	        };
+	      };
+        this.$.navButton.hidden = true;  this.$.backButton.hidden = false;
+				this.$.drawerPanel.disableEdgeSwipe = true;
+        this.$.reader.opened = true;
+        this.$.reader.$.player.opened = true;
+        this.appState = "read";
+			},
+			leaveRead: function() {
+				this.$.navButton.hidden = false;  this.$.backButton.hidden = true;
+				this.$.drawerPanel.disableEdgeSwipe = false;
+				this.$.reader.opened = false;
+				this.$.reader.$.player.opened = false;
+				this.appState = this.pageData.page;
+			},
+
+			signIn: function() {
+				this.$.auth.signInWithPopup();
+			},
+			signOut: function() {
+				this.$.auth.signOut();
+			},
+			_userInOut: function() {
+				if (this.signedIn) {
+					this.InOut = "Out";
+					this.$.greatings.innerHTML = "Hi, "+this.$.auth.user.displayName.split(/\s+/)[0];
+				}
+				else {
+					this.InOut = "In";
+					this.$.greatings.innerHTML = "";
+				}
+			}
+		});
+	</script>
+</dom-module>

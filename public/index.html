@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no">
+    <title>Lynleser</title>
+
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#795548">
+
+    <!-- Tile color for Win8 -->
+    <meta name="msapplication-TileColor" content="#795548">
+
+    <!-- Older Chrome configuration -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Lynleser">
+    <link rel="icon"
+          sizes="192x192"
+          href="/icons/icon-4x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Lynleser">
+    <link rel="apple-touch-icon" href="/icons/icon-4x.png">
+
+    <!-- Tile icon for Win8 (144x144) -->
+    <meta name="msapplication-TileImage" content="/icons/icon-square-3x.png">
+
+    <link rel="import" href="/style/app-theme.html">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="/bower_components/web-animations-js/web-animations.min.js"></script>
+    <link rel="import" href="/bower_components/platinum-sw/platinum-sw-elements.html"></script>
+    <link rel="import" href="/bower_components/polymerfire/firebase-app.html"></script>
+    <link rel="import" href="/lynleser-app.html"></script>
+    <link rel="import" href="/lynleser-demo.html"></script>
+
+    <style is="custom-style">
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        background-color: var(--lynleser-background-color);
+      }
+    </style>
+  </head>
+  <body>
+
+    <platinum-sw-register
+      auto-register
+      skip-waiting
+      clients-claim
+      reload-on-install
+      href="sw-import.js">
+      <platinum-sw-cache
+        default-cache-strategy="networkFirst">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+
+    <firebase-app
+      name="lynleser-no"
+      api-key="AIzaSyDdMBVZv5nuq8ytnh4uIncFw0QbGJcJi44"
+      auth-domain="lynleser-new.firebaseapp.com"
+      database-url="https://lynleser-new.firebaseio.com"
+      storage-bucket="lynleser-new.appspot.com">
+    </firebase-app>
+
+    <lynleser-app></lynleser-app>
+    <!-- <lynleser-demo></lynleser-demo> -->
+
+  </body>
+</html>

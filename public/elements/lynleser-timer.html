@@ -1,0 +1,67 @@
+<dom-module id="lynleser-timer">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-timer',
+
+			properties: {
+				userSpeed: {
+					type: Number,
+					observer: "calculateSpeed"
+				},
+        displaySpeed: {
+          type: Number
+        },
+        tick: {
+        	type: Number,
+        	value: 0,
+        	observer: "calculateSpeed"
+        }
+			},
+
+			calculateSpeed: function() {
+				warmUp = 5;
+				startUp = 30;
+				initialSlowdown = 0.6;
+				if (this.tick <= warmUp)
+					this.displaySpeed = 1000/(this.userSpeed*initialSlowdown);
+				else if (this.tick > warmUp && this.tick <= startUp) {
+					t = (this.tick-warmUp)/20;
+					x = ((t<.5 ? 2*t*t : -1+(4-2*t)*t)*(1-initialSlowdown))+initialSlowdown;
+					this.displaySpeed = 1000/(this.userSpeed*x);
+				}
+				else 
+					this.displaySpeed = 1000/this.userSpeed;
+        console.log(this.tick);
+        console.log(this.displaySpeed);
+			},
+
+			start: function() {
+				if (this.notReady) return;
+				clearTimeout(this.displayTime);
+				var self = this;
+        self.displayTime = setTimeout(function() {
+          self.fire("tick", null);
+          self.start();
+          if (self.tick < 30) 
+          	self.tick++;
+        }, this.displaySpeed);
+			},
+			pause: function() {
+				clearTimeout(this.displayTime);
+				this.tick=5;
+			},
+			stop: function() {
+				clearTimeout(this.displayTime);
+				this.tick=0;
+			}
+		});
+	</script>
+</dom-module>

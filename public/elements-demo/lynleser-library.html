@@ -1,0 +1,48 @@
+<link rel="import" href="lynleser-book.html">
+
+<dom-module id="lynleser-library">
+  <template>
+    <style is="custom-style">
+      :host {
+        text-align: left;
+      }
+    </style>
+
+    <firebase-query
+      id="query"
+      app-name="lynleser-no"
+      path="/books"
+      data="{{data}}">
+    </firebase-query>
+
+    <app-indexeddb-mirror
+      data="{{data}}"
+      persisted-data="{{persistedData}}">
+    </app-indexeddb-mirror>
+
+    <template is="dom-repeat" items="{{data}}" as="book">
+      <lynleser-book
+        id$="[[book.$key]]"
+        title="[[book.title]]"
+        body="[[book.body]]"
+        text-value={{textValue}}>
+      </lynleser-book>
+    </template>
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'lynleser-library',
+
+      properties: {
+        textValue: {
+          type: Array,
+          notify: true
+        }
+      }
+
+    });
+  </script>
+</dom-module>

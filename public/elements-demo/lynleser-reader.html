@@ -1,0 +1,110 @@
+<link rel="import" href="lynleser-player.html">
+<link rel="import" href="lynleser-timer.html">
+<link rel="import" href="lynleser-singleword-view.html">
+<link rel="import" href="lynleser-paragraph-view.html">
+
+<dom-module id="lynleser-reader">
+  <template>
+    <style>
+      :host .readerWrap {
+        position: absolute;
+        top: -70px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--default-lynleser-color);
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--text-lynleser-color);
+        pointer-events: none;
+        z-index: 2;
+      }
+      :host([opened]) .readerWrap {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #changeView {
+        position: fixed;
+        top: 60px;
+        left: 10px;
+        color: var(--lynleser-background-color);
+        font-size: 13px;
+        height: 30px;
+        z-index: 10;        
+      }
+      #clearButton {
+        position: fixed;
+        top: 60px;
+        right: 10px;
+        color: var(--lynleser-background-color);
+        font-size: 13px;
+        height: 30px;
+      }
+      #textDisplay {
+        font-size: calc(4vw + 8px);
+      }
+      /*#previewprev {
+        position: absolute;
+        bottom: 100px;
+        padding: 0 14px;
+        font-size: 12px;
+        color: var(--paper-brown-200);
+      }
+      #previewnext {
+        position: absolute;
+        top: 110px;
+        padding: 0 14px;
+        font-size: 12px;
+        color: var(--paper-brown-200);
+        text-align: right;
+      }*/
+    </style>
+    
+    <div class="readerWrap">
+      <paper-button id="changeView" on-tap="_toggleView">
+        <span>changeView</span>
+      </paper-button>
+      <paper-button id="clearButton" hidden="[[!pause]]">
+        <span>Clear Text</span>
+        <iron-icon icon="icons:clear"></iron-icon>
+      </paper-button>
+      <!-- <lynleser-reading-view></lynleser-reading-view> -->
+      <lynleser-paragraph-view id="paragraphDisplay"
+                               original-array=[[textArray]]
+                               position=[[wordNumber]]
+                               hidden=[[view]]>
+      </lynleser-paragraph-view>
+      <lynleser-singleword-view id="textDisplay"
+                                singlewords=[[textArray]]
+                                position=[[wordNumber]]
+                                showcontext=[[pause]]
+                                hidden=[[!view]]>
+      </lynleser-singleword-view>
+    </div>
+
+    <lynleser-player id="player" speed={{userSpeed}}></lynleser-player>
+    
+    <lynleser-timer id="timer" user-speed=[[userSpeed]]></lynleser-timer>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'lynleser-reader',
+
+      properties: {
+        textArray: {
+          type: Array,
+          notify: true,
+          observer: "arrayChange"
+        },
+      },
+
+      arrayChange: function() {
+        console.log(this.textArray);
+      },
+
+    });
+  </script>
+</dom-module>

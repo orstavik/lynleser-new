@@ -1,0 +1,50 @@
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="lynleser-home">
+	<template>
+		<style is="custom-style">
+      :host {
+        display: block;
+      }
+      paper-material {
+        background-color: #fff;
+        padding: 16px 20px;
+        margin: 0.5em 1em;
+        border-radius: 2px;
+      }
+      paper-textarea {
+        text-align: left;
+        margin-bottom: 14px;
+      }
+    </style>
+
+    <paper-material>
+      <paper-textarea label="Type some text!"
+                      id="textField">
+      </paper-textarea>
+    </paper-material>
+		
+	</template>
+	<script>
+		Polymer({
+      is: 'lynleser-home',
+      properties: {
+        homeText: {
+          type: Array,
+        },
+      },
+      listeners: {
+        "textField.change": "getText"
+      },
+      getText: function() {
+        if (!textField.value) return; 
+        if (this.$.textField.value.length !== 0) {
+          var textString = this.$.textField.value;
+          this.homeText = textString.split(/\s+/);
+        }
+        return this.homeText;
+      }
+		});
+	</script>
+</dom-module>

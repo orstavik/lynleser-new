@@ -1,0 +1,76 @@
+<dom-module id="lynleser-paragraph-view">
+	<template>
+		<style>
+			:host {
+		    display: block;
+		    width: 100%;
+		    position: absolute;
+		    top: 70px;
+			}
+			#originText {
+				color: black;
+				position: absolute;
+		    background-color: #795548;
+		    padding: 30px 20px 90px 50px;
+			}
+			#readText {
+				color: transparent;
+				position: absolute;
+		    padding: 30px 20px 90px 50px;
+			}
+			#currentWord {
+				color: yellow;
+				text-shadow: 0 0 1px;
+			}
+		</style>
+
+		<span id="originText">[[originalText]]</span>
+		<div id="readWrap">
+			<span id="readText">[[readText]]
+				<span id="currentWord">[[currentWord]]</span>
+			</span>
+		</div>
+		
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-paragraph-view',
+			properties: {
+				originalArray: {
+					type: Array
+				},
+				position: {
+					type: Number,
+					observer: "_createParagraph"
+				},
+				originalText: {
+					type: String
+				},
+				readText: {
+					type: String
+				},
+				currentWord: {
+					type: String
+				},
+			},
+			_createParagraph: function() {
+				if (!this.originalArray) return;
+				this.originalText = this.originalArray.join(" ");
+				this.readText = this.originalArray.slice(0, this.position).join(" ");
+				this.currentWord = this.originalArray[this.position];
+				this.scrollToWord();
+			},
+			scrollToWord: function() {
+				scrollCont = document.querySelector("#mainContainer");
+				word = this.$.currentWord;
+				word.top = word.getBoundingClientRect().top;
+				scrollCont.scrollTop = scrollCont.scrollTop + word.top - window.innerHeight/2;
+			},
+			clearText: function() {
+				this.set("currentWord", "Nothing to read ¯\\_(ツ)_/¯");
+				this.set("originalText", "");
+				this.set("readText", "");
+			}
+		});
+	</script>
+</dom-module>

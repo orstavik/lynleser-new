@@ -1,0 +1,65 @@
+<dom-module id="lynleser-singleword-view">
+	<template>
+		<style>
+			:host {
+				display: block;
+				height: 100%;
+				@apply(--layout);
+        @apply(--layout-center-center);
+			}
+		</style>
+
+    <!-- <p id="previewprev" hidden="[[!showcontext]]">[[prevtext]]</p>
+    <p id="previewprev" hidden="[[!showcontext]]">[[prevtext]]</p> -->
+    <p id="previewprev" hidden="[[!showcontext]]">[[prevtext]]</p>
+		<h1 id="singleword">[[singleword]]</h1>
+    <p id="previewnext" hidden="[[!showcontext]]">[[nexttext]]</p>
+    <!-- <p id="previewnext" hidden="[[!showcontext]]">[[nexttext]]</p>
+    <p id="previewnext" hidden="[[!showcontext]]">[[nexttext]]</p> -->
+		
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-singleword-view',
+			properties: {
+				singlewords: {
+					type: String,
+				},
+				position: {
+					type: Number,
+					observer: "_getWords"
+				},
+				singleword: {
+					type: String,
+					value: "Nothing to read ¯\\_(ツ)_/¯"
+				},
+				prevtext: {
+					type: String,
+					value: "p"
+				},
+				nexttext: {
+					type: String,
+					value: "n"
+				},
+				showcontext: {
+					type: Boolean,
+					value: false
+				},
+			},
+			_getWords: function() {
+				if (!this.singlewords) 
+					return;
+				this.set("singleword", this.singlewords[this.position]);
+				if (this.position < this.singlewords.length-2)
+					this.set("nexttext", this.singlewords[this.position+1]);
+				if (this.position > 0)
+					this.set("prevtext", this.singlewords[this.position-1]);
+			},
+			clearText: function() {
+				this.set("singleword", "Nothing to read ¯\\_(ツ)_/¯");
+				this.set("nexttext", "");
+				this.set("prevtext", "");
+			}
+		});
+	</script>
+</dom-module>

@@ -1,0 +1,159 @@
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<dom-module id="lynleser-player">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+      paper-fab {
+        visibility: visible;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background-color: var(--accent-lynleser-color);
+        z-index: 0;
+      }
+      :host([opened]) paper-fab {
+        visibility: hidden;
+        z-index: 4;
+      }
+      #menudiv {
+        visibility: hidden;
+        position: fixed;
+        bottom: 0px;
+        right: calc(50% - 28px);
+        width: 56px;
+        background-color: var(--accent-lynleser-color);
+        color: var(--paper-brown-900);
+        border-radius: 28px;
+        z-index: 5;
+        /*transition: width 0.075s cubic-bezier(0.4, 0.0, 0.9, 1) 0.025s,
+                    right 0.075s cubic-bezier(0.4, 0.0, 0.9, 1) 0.025s,
+                    border-radius 0.025s linear,
+                    visibility 0.01s ease 0.1s;*/
+        @apply(--layout-horizontal);
+        @apply(--layout-around-justified);
+        @apply(--layout-center);
+      }
+      :host([opened]) #menudiv {
+        visibility: visible;
+        width: 100%;
+        height: 56px;
+        right: 0;
+        border-radius: 0;
+        /*transition: width 0.075s cubic-bezier(0.4, 0.0, 0.9, 1) 0.2s,
+                    right 0.075s cubic-bezier(0.4, 0.0, 0.9, 1) 0.2s,
+                    border-radius 0.025s linear 0.275s,
+                    visibility 0.01s ease 0.2s;*/
+        @apply(--shadow-elevation-4dp);
+      }
+      :host([opened]) #progress {
+        bottom: 56px;
+        visibility: visible;
+        /*transition: bottom 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) 0.3s,
+                    visibility 0.1s ease 0.275s;*/
+      }
+      #progress {
+        visibility: hidden;
+        position: fixed;
+        width: 100%;
+        bottom: 46px;
+        z-index: 4;
+        /*transition: visibility 0.1s ease;*/
+      }
+      paper-icon-button {
+        transition-duration: 0.5s;
+      }
+      paper-icon-button[disabled] {
+        transition-duration: 0.5s;
+      }
+      paper-slider {
+        --paper-slider-knob-color: var(--paper-brown-900);
+        --paper-slider-knob-start-color: var(--paper-brown-900);
+        --paper-slider-knob-start-border-color: var(--paper-brown-900);
+        --paper-slider-active-color: var(--paper-brown-700);
+      }
+    </style>
+
+    <paper-fab icon="av:play-arrow"
+               id="playerFab">
+    </paper-fab>
+    <div id="menudiv">
+      <paper-icon-button icon="av:skip-previous"
+                         id="prev"
+                         style="margin-left: 10px">
+      </paper-icon-button>
+      <paper-icon-button icon=[[playIcon]] id="mainButton"></paper-icon-button>
+      </paper-icon-button>
+      <paper-icon-button icon="av:skip-next"
+                         id="next">
+      </paper-icon-button>
+      <paper-slider id="speed"
+                    min="1"
+                    max="10"
+                    value="3"
+                    tabindex="-1">
+      </paper-slider>
+    </div>
+    <paper-progress id="progress" value="0"></paper-progress>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'lynleser-player',
+      properties: {
+        opened: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        playIcon: {
+          type: String,
+          value: "av:pause"
+        },
+        speed: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+        }
+      },
+      listeners: {
+        "mainButton.tap": "_action",
+        "prev.tap": "_prevTap",
+        "next.tap": "_nextTap",
+        "speed.value-change": "_speedChange"
+      },
+      _action: function() {
+        if(this.playIcon == "av:pause") this._pauseTap();
+        else if(this.playIcon == "av:play-arrow") this._playTap();
+        else if(this.playIcon == "av:replay") this._restartTap();
+      },
+      _pauseTap: function() {
+        this.set("playIcon", "av:play-arrow");
+        this.fire("pause", null);
+      },
+      _playTap: function() {
+        this.set("playIcon", "av:pause");
+        this.fire("start", null);
+      },
+      _restartTap: function() {
+        this.set("playIcon", "av:replay");
+        this.fire("restart", null);
+      },
+      _prevTap: function() {       
+        this.fire("prev", null);
+      },
+      _nextTap: function() {
+        this.fire("next", null);
+      },
+      _speedChange: function() {
+        this.set("speed", this.$.speed.value);
+      }
+    });
+  </script>
+</dom-module>
