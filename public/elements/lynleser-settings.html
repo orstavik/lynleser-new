@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="lynleser-settings">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		
+		<paper-input label="Max reading speed" value={{settings.speed}}></paper-input>
+		<paper-input label="Max words in view" value={{settings.words}}></paper-input>
+		<paper-input label="Font style" value={{settings.fontstyle}}></paper-input>
+		<paper-input label="Font size" value={{settings.fontsize}}></paper-input>
+		<paper-input label="Theme" value={{settings.theme}}></paper-input>
+		<paper-input label="Paragraph width" value={{settings.width}}></paper-input>
+		<paper-input label="Line height"  value={{settings.lineheight}}></paper-input>
+
+		<pre>
+		my books []
+		 book1: [id, position]
+		</pre>
+
+	</template>
+	<script>
+		Polymer({
+			is: 'lynleser-settings',
+			properties: {
+				settings: {
+					type: Object,
+					value: function() {
+						return {};
+					},
+				},
+				/*
+				booksImReading :{
+					type: Object,
+					value: null //here we can add all the books and positions
+				},
+				currentBook : {
+					type: String,
+					value: null
+				},
+				*/
+			},
+			observers: [
+				"settingsUpdate(settings.*)"
+			],
+			settingsUpdate: function() {
+	   		console.log(this.settings);
+			}
+		});
+	</script>
+</dom-module>

@@ -1,0 +1,41 @@
+[debug] [2018-01-02T09:11:44.214Z] ----------------------------------------------------------------------
+[debug] [2018-01-02T09:11:44.216Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\fales\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-02T09:11:44.216Z] CLI Version:   3.16.0
+[debug] [2018-01-02T09:11:44.216Z] Platform:      win32
+[debug] [2018-01-02T09:11:44.216Z] Node Version:  v9.2.0
+[debug] [2018-01-02T09:11:44.216Z] Time:          Tue Jan 02 2018 11:11:44 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:44.216Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-02T09:11:44.226Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-02T09:11:44.226Z] > authorizing via signed-in user
+[debug] [2018-01-02T09:11:44.228Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-01-02T09:11:44.228Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/fjNPIQqp1nmgKwUCTG-Z3WKcKX-ekpZFckRQb_UxP4oaRF1WQZASTJG1UUHY4xrM',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Tue Jan 02 2018 11:11:44 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:44.441Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-02T09:11:44.445Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/lynleser-new  
+  
+ Tue Jan 02 2018 11:11:44 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:45.205Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-02T09:11:45.206Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/lynleser-new/tokens  
+  
+ Tue Jan 02 2018 11:11:45 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:45.841Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'E:\Programming\Polymer\interText\lynleser-new'...
+[info] 
+[debug] [2018-01-02T09:11:45.843Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/lynleser-new  
+  
+ Tue Jan 02 2018 11:11:45 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:46.711Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-02T09:11:46.712Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/775199036978/clients/_:getWebAppConfig  
+  
+ Tue Jan 02 2018 11:11:46 GMT+0200 (FLE Standard Time)
+[debug] [2018-01-02T09:11:47.949Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+

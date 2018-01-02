@@ -16,6 +16,7 @@
 <link rel="import" href="/elements/lynleser-home.html">
 <link rel="import" href="/elements/lynleser-reader.html">
 <link rel="import" href="/elements/lynleser-library.html">
+<link rel="import" href="/elements/lynleser-settings.html">
 
 <dom-module id="lynleser-app">
 	<template>
@@ -91,6 +92,9 @@
 						<a page-name="library" href="#/library">
 							<paper-item id="libraryButton">Library</paper-item>
 						</a>
+						<a page-name="settings" href="#/settings">
+							<paper-item id="settingsButton">Settings</paper-item>
+						</a>
 					</paper-menu>
 				</paper-header-panel>
 				<paper-header-panel main>
@@ -121,8 +125,11 @@
 							<section page-name="library">
 								<lynleser-library id="library"></lynleser-library>
 							</section>
+							<section page-name="settings">
+								<lynleser-settings id="settings" settings={{settings}}></lynleser-settings>
+							</section>
 						</iron-pages>
-						<lynleser-reader id="reader"></lynleser-reader>
+						<lynleser-reader id="reader" settings={{settings}}></lynleser-reader>
 					</div>
 				</paper-header-panel>
 			</paper-drawer-panel>
@@ -176,12 +183,19 @@
 				"homeButton.tap": "goHome",
 				"libraryButton.tap": "goLibrary",
 				"backButton.tap": "leaveRead",
+				"settings.settingsUpdated": "_updateSettings"
 			},
 			attached: function() {
 				if (!this.$.appRoute.route.path) {
 					this.$.appRoute.set('route.path', '/home');
 					this.pageData.page = "home";
 				}
+			},
+			_updateSettings: function(e, detail){
+				//todo add
+				console.log(e.detail);
+				console.log(detail);
+				//this.$.reader.updateSettings(detail);
 			},
 			_isReading: function() {
 				this.appPhase = "reading";

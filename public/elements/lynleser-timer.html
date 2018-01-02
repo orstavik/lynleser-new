@@ -17,7 +17,8 @@
 					observer: "calculateSpeed"
 				},
         displaySpeed: {
-          type: Number
+          type: Number,
+          notify: true
         },
         tick: {
         	type: Number,
@@ -33,7 +34,7 @@
 				if (this.tick <= warmUp)
 					this.displaySpeed = 1000/(this.userSpeed*initialSlowdown);
 				else if (this.tick > warmUp && this.tick <= startUp) {
-					t = (this.tick-warmUp)/20;
+					t = (this.tick-warmUp)/(startUp-warmUp);
 					x = ((t<.5 ? 2*t*t : -1+(4-2*t)*t)*(1-initialSlowdown))+initialSlowdown;
 					this.displaySpeed = 1000/(this.userSpeed*x);
 				}

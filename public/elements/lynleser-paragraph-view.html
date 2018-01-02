@@ -3,33 +3,91 @@
 		<style>
 			:host {
 		    display: block;
-		    width: 100%;
+    		padding: 110px 20px 90px 50px;
+    		background-color: #3a3a3c;
+			}
+			#readText, #futureText {
+				color: #58585a;
+			}
+			#pppWord, #nnnWord {
+				color: #6d6e72;
+			}
+			#ppWord, #nnWord {
+				color: #a8a9ad;
+			}
+			#pWord, #nWord {
+				color: #dbdbdc;
+			}
+			#currentWord:before {
+				content: "";
 		    position: absolute;
-		    top: 70px;
-			}
-			#originText {
-				color: black;
-				position: absolute;
-		    background-color: #795548;
-		    padding: 30px 20px 90px 50px;
-			}
-			#readText {
-				color: transparent;
-				position: absolute;
-		    padding: 30px 20px 90px 50px;
+		    background: #fff;
+		    opacity: 0.15;
+		    width: 100%;
+		    height: 100px;
+		    left: 0;
+		    margin-top: -100px;
 			}
 			#currentWord {
-				color: yellow;
-				text-shadow: 0 0 1px;
+				font-size: 17px;
+				color: #fffcf3;
+			}
+			#currentWord:after {
+				content: "";
+		    position: absolute;
+		    background: #fff;
+		    opacity: 0.15;
+		    width: 100%;
+		    height: 100px;
+		    left: 0;
+		    margin-top: 20px;
+			}
+			@keyframes pppAnim {
+				0% {color: #a8a9ad}
+				50% {color: #6d6e72}
+				100% {color: #58585a}
+			}
+			@keyframes ppAnim {
+				0% {color: #dbdbdc}
+				50% {color: #a8a9ad}
+				100% {color: #6d6e72}
+			}
+			@keyframes pAnim {
+				0% {color: #fffcf3}
+				50% {color: #dbdbdc}
+				100% {color: #a8a9ad}
+			}
+			@keyframes currentAnim {
+				0% {color: #58585a}
+				50% {color: #fffcf3}
+				100% {color: #58585a}
+			}
+			@keyframes nAnim {
+				0% {color: #a8a9ad}
+				50% {color: #dbdbdc}
+				100% {color: #fffcf3}
+			}
+			@keyframes nnAnim {
+				0% {color: #6d6e72}
+				50% {color: #a8a9ad}
+				100% {color: #dbdbdc}
+			}
+			@keyframes nnnAnim {
+				0% {color: #58585a}
+				50% {color: #6d6e72}
+				100% {color: #a8a9ad}
 			}
 		</style>
 
-		<span id="originText">[[originalText]]</span>
-		<div id="readWrap">
-			<span id="readText">[[readText]]
-				<span id="currentWord">[[currentWord]]</span>
-			</span>
-		</div>
+		<span id="readText">[[readText]]</span>
+		<!-- <span id="pppWord">[[pppWord]]</span>
+		<span id="ppWord">[[ppWord]]</span>
+		<span id="pWord">[[pWord]]</span> -->
+		<span id="currentWord">[[currentWord]]</span>
+		<!-- <span id="nWord">[[nWord]]</span>
+		<span id="nnWord">[[nnWord]]</span>
+		<span id="nnnWord">[[nnnWord]]</span> -->
+		<span id="futureText">[[futureText]]</span>
 		
 	</template>
 	<script>
@@ -43,22 +101,49 @@
 					type: Number,
 					observer: "_createParagraph"
 				},
-				originalText: {
-					type: String
-				},
 				readText: {
 					type: String
 				},
 				currentWord: {
 					type: String
 				},
+				futureText: {
+					type: String
+				},
+				animSpeed: {
+					type: Number,
+					notify: true
+				}
 			},
 			_createParagraph: function() {
 				if (!this.originalArray) return;
-				this.originalText = this.originalArray.join(" ");
 				this.readText = this.originalArray.slice(0, this.position).join(" ");
+				// this.pppWord = this.originalArray[this.position-3];
+				// this.ppWord = this.originalArray[this.position-2];
+				// this.pWord = this.originalArray[this.position-1];
 				this.currentWord = this.originalArray[this.position];
+				// this.nWord = this.originalArray[this.position+1];
+				// this.nnWord = this.originalArray[this.position+2];
+				// this.nnnWord = this.originalArray[this.position+3];
+				this.futureText = this.originalArray.slice(this.position+1).join(" ");
 				this.scrollToWord();
+				if (this.animSpeed) {
+					animDuration = this.animSpeed/1000 + "s";
+					this.$.currentWord.style.animation = "";
+					this.$.currentWord.style.animation = "currentAnim "+animDuration+" infinite";
+				};
+				// 	this.$.pppWord.style.animation = "";
+				// 	this.$.ppWord.style.animation = "";
+				// 	this.$.pWord.style.animation = "";
+				// 	this.$.nWord.style.animation = "";
+				// 	this.$.nnWord.style.animation = "";
+				// 	this.$.nnnWord.style.animation = "";
+				// 	this.$.pppWord.style.animation = "pppAnim "+animDuration+" infinite";
+				// 	this.$.ppWord.style.animation = "ppAnim "+animDuration+" infinite";
+				// 	this.$.pWord.style.animation = "pAnim "+animDuration+" infinite";
+				// 	this.$.nWord.style.animation = "nAnim "+animDuration+" infinite";
+				// 	this.$.nnWord.style.animation = "nnAnim "+animDuration+" infinite";
+				// 	this.$.nnnWord.style.animation = "nnnAnim "+animDuration+" infinite";
 			},
 			scrollToWord: function() {
 				scrollCont = document.querySelector("#mainContainer");

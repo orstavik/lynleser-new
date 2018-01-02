@@ -12,7 +12,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--default-lynleser-color);
+        background-color: #3a3a3c;
         opacity: 0;
         transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         color: var(--text-lynleser-color);
@@ -72,7 +72,8 @@
       <lynleser-paragraph-view id="paragraphDisplay"
                                original-array=[[textArray]]
                                position=[[wordNumber]]
-                               hidden=[[view]]>
+                               hidden=[[view]]
+                               anim-speed=[[animSpeed]]>
       </lynleser-paragraph-view>
       <lynleser-singleword-view id="textDisplay"
                                 singlewords=[[textArray]]
@@ -82,9 +83,9 @@
       </lynleser-singleword-view>
     </div>
 
-    <lynleser-player id="player" speed={{userSpeed}}></lynleser-player>
+    <lynleser-player id="player" speed={{settings.speed}}></lynleser-player>
     
-    <lynleser-timer id="timer" user-speed=[[userSpeed]]></lynleser-timer>
+    <lynleser-timer id="timer" user-speed=[[settings.speed]] display-speed={{animSpeed}}></lynleser-timer>
 
   </template>
 
@@ -115,6 +116,12 @@
         view: {
           type: Boolean,
           value: false
+        },
+        settings: {
+          type: Object,
+          value: function(){
+            return {};
+          }
         }
       },
       listeners: {
